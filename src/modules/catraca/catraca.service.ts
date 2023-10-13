@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CatracaMessageDto } from 'src/dto/catraca/catraca-sendmessage.dto';
+import { CatracaMessageDto } from './dto/catraca-sendmessage.dto';
 
 @Injectable()
 export class CatracaService {
