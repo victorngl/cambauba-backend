@@ -10,55 +10,56 @@ export class CatracaService {
   constructor(private readonly httpService: HttpService, @Inject(CACHE_MANAGER) private cacheManager: Cache) { }
   async sendNotificationToAgendaEdu(catracaMessageDto: CatracaMessageDto, agendaEduBearerToken: string): Promise<object | null> {
 
-    
     const [date, time] = catracaMessageDto.schedule.split(' ');
 
     const data = {
       notification: {
-        student_external_id: catracaMessageDto.studentId,
+        student_external_id: [catracaMessageDto.studentId],
         student_can_see: true,
         send_to_all_responsibles: true,
         category: "gate",
         send_at: "2022-10-11 14:56:00",
-        title: "Entrada e Saída",
+        title: (catracaMessageDto.type === 'IN') ? 'Entrada na Escola.' : 'Saída da Escola',
         description: "O aluno " + catracaMessageDto.studentName + (catracaMessageDto.type === 'IN' ? " entrou na" : " saiu da") + " Escola às " + time + " em " + date + ".",
         from: "Catraca EMC"
       }
     };
 
     const headers = {
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + agendaEduBearerToken,
       'x-school-token': process.env.AGENDAEDU_SCHOOL_ID,
     };
-    
-    
+
     try {
-      
-      const getResponseNotification = await this.httpService.post("https://api.agendaedu.com/v2/notification", data, {
+
+      const getResponseNotification = await this.httpService.post("https://api.agendaedu.com/v2/notifications", data, {
         headers: headers
       }).toPromise()
 
       const responseNotificationData = getResponseNotification.data;
 
-      if (responseNotificationData.status === 200) {
-        return { message: 'Notificação enviada com sucesso.'}
+      console.log(getResponseNotification.data);
+
+      if (getResponseNotification.status === 200) {
+        return { responseNotificationData }
       }
-      else if(responseNotificationData.status === 401) {
+      else if (getResponseNotification.status === 401) {
         throw new HttpException('Erro ao enviar notificação', HttpStatus.UNAUTHORIZED);
       }
-      else if(responseNotificationData.status === 422) {
-        throw new HttpException('Erro no servidor Agenda Edu', HttpStatus.BAD_GATEWAY);
+      else if (getResponseNotification.status === 403) {
+        throw new HttpException('Você não tem permissão para executar esse operação', HttpStatus.UNAUTHORIZED);
       }
-      else {
-        console.log(responseNotificationData);
-        return null
+      else if (getResponseNotification.status === 422) {
+        throw new HttpException('Erro no servidor Agenda Edu', HttpStatus.BAD_GATEWAY);
       }
 
     }
     catch (error) {
-      throw new HttpException('error.message', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    //
   }
 
   saveMoveOnDb(): boolean {

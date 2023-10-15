@@ -37,11 +37,10 @@ export class CatracaController {
       }
 
       await this.cacheManager.set('AGENDAEDU_BEARER', responseAgendaEdu.access_token, responseAgendaEdu.expireIn * 1000)
-
       agendaEduBearerToken = responseAgendaEdu.access_token
-      
-    }
 
+     
+    }
     return await this.catracaService.sendNotificationToAgendaEdu(catracaMessageDto, agendaEduBearerToken);
   }
 }
