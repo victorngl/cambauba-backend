@@ -9,8 +9,11 @@ export class CatracaMessageDto {
   @IsNotEmpty()
   @IsString()
   studentId: string;
+  @IsNotEmpty()
+  @IsString()
+  studentName: string;
   @ApiProperty({
-    example: '11-10-2023 14:25',
+    example: '2013-10-10 14:25:00',
     description: `Horário e dia em que o aluno passou na catraca.`,
   })
   @IsNotEmpty()

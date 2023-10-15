@@ -22,21 +22,23 @@ export class AuthService {
     };
   }
 
-  async tokenGeneretor(payload: { email: string }, timeToExpire: string) {
+  async tokenGeneretor(payload: { email: string }, timeToExpire: string | null) {
+
+    let secretConfigs;
+    secretConfigs = { secret: jwtConstants.secret }
+
+    if(timeToExpire!== null) {
+      secretConfigs = { ...secretConfigs, expiresIn: timeToExpire };
+    }
+    
     const accessToken = await this.jwtService.signAsync(
       { email: payload.email },
-      {
-        secret: jwtConstants.secret,
-        expiresIn: timeToExpire,
-      },
+      secretConfigs,
     );
 
     const refreshToken = await this.jwtService.signAsync(
       { email: payload.email },
-      {
-        secret: jwtConstants.refreshSecret,
-        expiresIn: timeToExpire,
-      },
+      secretConfigs,
     );
     return { access_token: accessToken, refresh_token: refreshToken };
   }

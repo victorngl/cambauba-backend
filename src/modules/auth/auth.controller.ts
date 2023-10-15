@@ -21,7 +21,7 @@ export class AuthController {
 
   @Post('refresh')
   reautenticar(@Body() body) {
-    return this.authService.reauthenticate(body); //este método será implementado abaixo, portanto é esperado que de erro.
+    return this.authService.reauthenticate(body);
   }
 
 

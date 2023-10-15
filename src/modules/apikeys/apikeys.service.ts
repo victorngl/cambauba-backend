@@ -4,6 +4,7 @@ import { Prisma, ApiKeys } from '@prisma/client';
 import { Apikey } from './entities/apikey.entity';
 import { CreateApikeyDto } from './dto/create-apikey.dto';
 
+
 @Injectable()
 export class ApikeysService {
   constructor(private prisma: PrismaService) { }
@@ -33,7 +34,7 @@ export class ApikeysService {
     });
   }
 
-  async createApiKey(data: CreateApikeyDto): Promise<ApiKeys> {
+  async createApiKey(data: Prisma.ApiKeysCreateInput): Promise<ApiKeys> {
     return this.prisma.apiKeys.create({
       data,
     });
@@ -58,7 +59,7 @@ export class ApikeysService {
     });
 
     if (!apiKeyExits) {
-      throw new HttpException('ApiKeys não existe', HttpStatus.NOT_FOUND);
+      throw new HttpException('ApiKey não existe', HttpStatus.NOT_FOUND);
     }
 
     return this.prisma.apiKeys.delete({

@@ -10,6 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// [START] Users of Backend and their Api Keys
 model User {
   id    Int     @unique @default(autoincrement()) @id
   email String 
@@ -21,7 +22,41 @@ model User {
 
 model ApiKeys {
   id        Int     @default(autoincrement()) @id
-  key       String
-  author    User    @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade) 
-  authorId  Int     
+  token     String
+  owner    User    @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade) 
+  ownerId   Int
+  expire    String?    
+  name      String 
 }
+
+// [END] Users of Backend and their Api Keys
+
+//[START] Alunos e Responsaveis e Relação entre os dois
+
+model Student {
+  id          Int     @default(autoincrement()) @id
+  external_id String?
+  name        String
+  parents     ParentsStudent[]
+}
+
+model Parent {
+  id          Int     @default(autoincrement()) @id
+  external_id String?
+  name        String
+  studens     ParentsStudent[]
+}
+
+model ParentsStudent {
+  student    Student     @relation(fields: [studentId], references: [id])
+  studentId  Int // relation scalar field (used in the `@relation` attribute above)
+  parent     Parent @relation(fields: [parentId], references: [id])
+  parentId   Int // relation scalar field (used in the `@relation` attribute above)
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([studentId, parentId])
+}
+
+
+//[END] Alunos e Responsaveis e Relação entre os dois

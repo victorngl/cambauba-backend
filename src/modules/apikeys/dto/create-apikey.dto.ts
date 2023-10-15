@@ -1,14 +1,17 @@
-import { ApiKeys } from "@prisma/client";
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class CreateApikeyDto implements Partial<ApiKeys> {
+export class CreateApikeyDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    key       :string
+    name      :string;
+    @IsNotEmpty()
     @ApiProperty()
     @IsNumber()
+    ownerId  :number
+    @ApiProperty()
     @IsNotEmpty()
-    authorId  :number
+    expire?   :string;
+    token?    :string;
 }
