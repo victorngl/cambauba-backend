@@ -37,7 +37,7 @@ pipeline {
                 // Acessar o diretório do projeto
                 dir('/root/cambauba-backend') {
                     // Executar migrações do Prisma
-                    sh 'npx prisma db push'
+                    sh 'npx prisma db push --force-reset'
                 }
             }
         }
