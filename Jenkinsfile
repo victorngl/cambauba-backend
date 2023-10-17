@@ -22,7 +22,7 @@ pipeline {
             }
         }
 
-        stage('Instalar Dependências ') {
+        stage('Instalar Dependências') {
             steps {
                 // Acessar o diretório do projeto
                 dir('/root/cambauba-backend') {
