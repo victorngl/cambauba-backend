@@ -42,6 +42,7 @@ model Student {
   isnew        Boolean?
   responsibles ResponsibleStudents[]
   carriers     AuthorizedCarriersOnStudents[]
+  
   cotaparte    CotaParteControle?
 }
 
