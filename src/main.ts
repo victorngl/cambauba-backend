@@ -21,7 +21,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());  //Valida os Types
 
-  await app.listen(3000);
+  await app.listen(3010);
 }
 
 bootstrap();

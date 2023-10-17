@@ -3,6 +3,7 @@ import { CatracaMessageDto } from './dto/catraca-sendmessage.dto';
 import { HttpService } from '@nestjs/axios';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager'
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 
 @Injectable()
 
@@ -18,7 +19,7 @@ export class CatracaService {
         student_can_see: true,
         send_to_all_responsibles: true,
         category: "gate",
-        send_at: "2022-10-11 14:56:00",
+        send_at: catracaMessageDto.schedule,
         title: (catracaMessageDto.type === 'IN') ? 'Entrada na Escola.' : 'Saída da Escola',
         description: "O aluno " + catracaMessageDto.studentName + (catracaMessageDto.type === 'IN' ? " entrou na" : " saiu da") + " Escola às " + time + " em " + date + ".",
         from: "Catraca EMC"
@@ -34,9 +35,9 @@ export class CatracaService {
 
     try {
 
-      const getResponseNotification = await this.httpService.post("https://api.agendaedu.com/v2/notifications", data, {
+      const getResponseNotification = await lastValueFrom(await this.httpService.post("https://api.agendaedu.com/v2/notifications", data, {
         headers: headers
-      }).toPromise()
+      }))
 
       const responseNotificationData = getResponseNotification.data;
 
@@ -78,9 +79,9 @@ export class CatracaService {
     };
 
     try {
-      const getBearerTokenReq = await this.httpService.post("https://api.agendaedu.com/oauth/v2/token", data, {
+      const getBearerTokenReq = await lastValueFrom(await this.httpService.post("https://api.agendaedu.com/oauth/v2/token", data, {
         headers: headers
-      }).toPromise()
+      }))
 
       const respondeGetBearerToken = getBearerTokenReq.data;
 
