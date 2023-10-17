@@ -12,21 +12,20 @@ datasource db {
 
 // [START] Users of Backend and their Api Keys
 model User {
-  id    Int     @unique @default(autoincrement()) @id
-  email String 
-  name  String?
+  id       Int       @id @unique @default(autoincrement())
+  email    String
+  name     String?
   password String
-  apiKeys ApiKeys[]
-
+  apiKeys  ApiKeys[]
 }
 
 model ApiKeys {
-  id        Int     @default(autoincrement()) @id
-  token     String
-  owner    User    @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade) 
-  ownerId   Int
-  expire    String?    
-  name      String 
+  id      Int     @id @default(autoincrement())
+  token   String
+  owner   User    @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ownerId Int
+  expire  String?
+  name    String
 }
 
 // [END] Users of Backend and their Api Keys
@@ -34,29 +33,71 @@ model ApiKeys {
 //[START] Alunos e Responsaveis e Relação entre os dois
 
 model Student {
-  id          Int     @default(autoincrement()) @id
+  id           Int                            @id @default(autoincrement())
+  external_id  String?                        @unique
+  name         String
+  active       Boolean
+  course       String
+  class        String
+  isnew        Boolean?
+  responsibles ResponsibleStudents[]
+  carriers     AuthorizedCarriersOnStudents[]
+}
+
+model Responsible {
+  id          Int                   @id @default(autoincrement())
   external_id String?
   name        String
-  parents     ParentsStudent[]
+  cellphone   String?
+  email       String?
+  studens     ResponsibleStudents[]
+  carries     AuthorizedCarriers[]
 }
 
-model Parent {
-  id          Int     @default(autoincrement()) @id
-  external_id String?
-  name        String
-  studens     ParentsStudent[]
+model ResponsibleStudents {
+  student       Student     @relation(fields: [studentId], references: [id])
+  studentId     Int // relation scalar field (used in the `@relation` attribute above)
+  responsible   Responsible @relation(fields: [responsibleId], references: [id])
+  responsibleId Int // relation scalar field (used in the `@relation` attribute above)
+  assignedAt    DateTime    @default(now())
+  assignedBy    String
+
+  @@id([studentId, responsibleId])
 }
 
-model ParentsStudent {
-  student    Student     @relation(fields: [studentId], references: [id])
-  studentId  Int // relation scalar field (used in the `@relation` attribute above)
-  parent     Parent @relation(fields: [parentId], references: [id])
-  parentId   Int // relation scalar field (used in the `@relation` attribute above)
-  assignedAt DateTime @default(now())
-  assignedBy String
-
-  @@id([studentId, parentId])
+model CotaParteControle {
+  id          Int   @id @default(autoincrement())
+  studentId   Int
+  installment Int
+  paid        Int
+  price       Float
+  year        Int?
 }
-
 
 //[END] Alunos e Responsaveis e Relação entre os dois
+
+// [START] Autorizados a buscar
+
+model AuthorizedCarriers {
+  id          Int         @id @unique() @default(autoincrement())
+  name        String
+  cpf         String
+  parentesco  String
+  createdById Int
+  createdBy   Responsible @relation(fields: [createdById], references: [id])
+  createdAt   DateTime    @default(now())
+
+  students AuthorizedCarriersOnStudents[]
+}
+
+model AuthorizedCarriersOnStudents {
+  studentId  Int
+  student    Student            @relation(fields: [studentId], references: [id])
+  carrierId  Int
+  carrier    AuthorizedCarriers @relation(fields: [carrierId], references: [id])
+  assignedAt DateTime           @default(now())
+
+  @@id([studentId, carrierId])
+}
+
+// [END] Autorizados a buscar
