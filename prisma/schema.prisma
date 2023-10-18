@@ -74,7 +74,7 @@ model CotaParteControle {
   installment Int
   paid        Int
   price       Float
-  dependency  Int       @default(0)
+  dependency  Int       @default(1)
   year        Int?
 }
 
