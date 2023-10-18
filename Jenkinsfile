@@ -31,16 +31,7 @@ pipeline {
                 }
             }
         }
-        stage('Migrar Banco de Dados') {
-            steps {
-                // Acessar o diretório do projeto
-                dir('/root/cambauba-backend') {
-                    // Executar migrações do Prisma
-                    sh 'npx prisma db push --force-reset'
-                }
-            }
-        }
-
+        
         stage('Construir Aplicativo') {
             steps {
                 // Acessar o diretório do projeto

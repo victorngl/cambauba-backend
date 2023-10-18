@@ -68,12 +68,13 @@ model ResponsibleStudents {
 }
 
 model CotaParteControle {
-  id          Int   @id @default(autoincrement())
-  studentId   Int   @unique
-  student     Student     @relation(fields: [studentId], references: [id])
+  id          Int       @id @default(autoincrement())
+  studentId   Int       @unique
+  student     Student   @relation(fields: [studentId], references: [id])
   installment Int
   paid        Int
   price       Float
+  dependency  Int       @default(0)
   year        Int?
 }
 
