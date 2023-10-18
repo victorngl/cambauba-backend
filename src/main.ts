@@ -8,7 +8,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Cambaúba API Documentation')
-    .setDescription('Documentação da API de Dados da Escola Modelar Cambaúba [PIPELINE]')
+    .setDescription('Documentação da API de Dados da Escola Modelar Cambaúba')
     .setVersion('1.0')
     .addTag('API Endpoints')
     .build();
