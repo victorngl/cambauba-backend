@@ -31,7 +31,6 @@ pipeline {
                 }
             }
         }
-
         stage('Migrar Banco de Dados') {
             steps {
                 // Acessar o diretório do projeto
