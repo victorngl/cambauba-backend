@@ -15,7 +15,7 @@ export class CatracaService {
 
     const data = {
       notification: {
-        student_external_id: [catracaMessageDto.studentId],
+        student_external_id: catracaMessageDto.studentId,
         student_can_see: true,
         send_to_all_responsibles: true,
         category: "gate",
@@ -33,6 +33,8 @@ export class CatracaService {
       'x-school-token': process.env.AGENDAEDU_SCHOOL_ID,
     };
 
+    console.log(agendaEduBearerToken);
+
     try {
 
       const getResponseNotification = await lastValueFrom(await this.httpService.post("https://api.agendaedu.com/v2/notifications", data, {
@@ -41,7 +43,7 @@ export class CatracaService {
 
       const responseNotificationData = getResponseNotification.data;
 
-      console.log(getResponseNotification.data);
+     
 
       if (getResponseNotification.status === 200) {
         return { responseNotificationData }

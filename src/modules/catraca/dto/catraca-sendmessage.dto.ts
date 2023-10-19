@@ -9,6 +9,10 @@ export class CatracaMessageDto {
   @IsNotEmpty()
   @IsString()
   studentId: string;
+  @ApiProperty({
+    example: 'Gustavo Carmo',
+    description: `Nome do Aluno`,
+  })
   @IsNotEmpty()
   @IsString()
   studentName: string;
