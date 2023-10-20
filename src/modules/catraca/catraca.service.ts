@@ -1,14 +1,11 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CatracaMessageDto } from './dto/catraca-sendmessage.dto';
 import { HttpService } from '@nestjs/axios';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager'
-import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
-
 export class CatracaService {
-  constructor(private readonly httpService: HttpService, @Inject(CACHE_MANAGER) private cacheManager: Cache) { }
+  constructor(private readonly httpService: HttpService) { }
   async sendNotificationToAgendaEdu(catracaMessageDto: CatracaMessageDto, agendaEduBearerToken: string): Promise<object | null> {
 
     const [date, time] = catracaMessageDto.schedule.split(' ');
@@ -32,8 +29,6 @@ export class CatracaService {
       'Authorization': 'Bearer ' + agendaEduBearerToken,
       'x-school-token': process.env.AGENDAEDU_SCHOOL_ID,
     };
-
-    console.log(agendaEduBearerToken);
 
     try {
 
@@ -69,35 +64,4 @@ export class CatracaService {
     return false;
   }
 
-  async generateAgendaEduBearerToken() {
-    const data = {
-      grant_type: "client_credentials",
-      client_id: process.env.AGENDAEDU_CLIENT_ID,
-      client_secret: process.env.AGENDAEDU_SECRET_KEY
-    };
-
-    const headers = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
-
-    try {
-      const getBearerTokenReq = await lastValueFrom(await this.httpService.post("https://api.agendaedu.com/oauth/v2/token", data, {
-        headers: headers
-      }))
-
-      const respondeGetBearerToken = getBearerTokenReq.data;
-
-      if (getBearerTokenReq.status === 200) {
-        return respondeGetBearerToken
-      }
-      else {
-        return null
-      }
-
-    }
-    catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-  }
 }

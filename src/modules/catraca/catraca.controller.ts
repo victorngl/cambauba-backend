@@ -2,13 +2,13 @@ import { Body, Controller, HttpCode, HttpException, HttpStatus, Inject, Post } f
 import { CatracaService } from './catraca.service';
 import { CatracaMessageDto } from './dto/catraca-sendmessage.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager'
+import { AgendaeduService } from '../agendaedu/agendaedu.service';
+
 
 @ApiTags('Catraca')
 @Controller('catraca')
 export class CatracaController {
-  constructor(private readonly catracaService: CatracaService, @Inject(CACHE_MANAGER) private cacheManager: Cache) {}
+  constructor(private readonly catracaService: CatracaService, private readonly agendaeduService: AgendaeduService) {}
 
   @Post('move')
   @HttpCode(200)
@@ -28,20 +28,8 @@ export class CatracaController {
     }
 
     //OBTENCAO DO TOKEN BEARER DA AGENDA EDU
-    let agendaEduBearerToken: string | null = await this.cacheManager.get('AGENDAEDU_BEARER');
+    const agendaEduBearerToken = await this.agendaeduService.getAgendaEduBearerToken();
 
-    if(!agendaEduBearerToken) {
-      const responseAgendaEdu = await this.catracaService.generateAgendaEduBearerToken();
-
-      if(responseAgendaEdu === null) {
-        throw new HttpException("Erro ao gerar token Bearer Agenda Edu", HttpStatus.NOT_FOUND);
-      }
-
-      await this.cacheManager.set('AGENDAEDU_BEARER', responseAgendaEdu.access_token, responseAgendaEdu.expireIn * 1000)
-      agendaEduBearerToken = responseAgendaEdu.access_token
-
-     
-    }
     return await this.catracaService.sendNotificationToAgendaEdu(catracaMessageDto, agendaEduBearerToken);
   }
 }
