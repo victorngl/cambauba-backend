@@ -19,12 +19,10 @@ export class AgendaEduNotificationService implements NotificationsService
         };
 
         try {
-            //const getResponseNotification = await lastValueFrom(await this.httpService.post("https://api.agendaedu.com/v2/notifications", dataMessage, {
-            //    headers: headers
-            //}))
-
-            const getResponseNotification = { status: 200 };
-
+            const getResponseNotification = await lastValueFrom(await this.httpService.post("https://api.agendaedu.com/v2/notifications", dataMessage, {
+                headers: headers
+            }))
+            
             if (getResponseNotification.status === 200) {
                 return { status: 'OK', message: 'Notificação enviada com sucesso.'}
             }
