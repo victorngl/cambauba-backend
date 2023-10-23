@@ -12,12 +12,14 @@ datasource db {
 
 // [START] Users of Backend and their Api Keys
 model User {
-  id       Int       @id @unique @default(autoincrement())
-  email    String
-  name     String?
-  password String
-  apiKeys  ApiKeys[]
+  id             Int         @id @unique @default(autoincrement())
+  email          String
+  name           String?
+  password       String
+  permissions    Json?
+  apiKeys        ApiKeys[]
 }
+
 
 model ApiKeys {
   id      Int     @id @default(autoincrement())
@@ -42,8 +44,8 @@ model Student {
   isnew        Boolean?
   responsibles ResponsibleStudents[]
   carriers     AuthorizedCarriersOnStudents[]
-  
-  cotaparte    CotaParteControle?
+
+  cotaparte CotaParteControle?
 }
 
 model Responsible {
@@ -68,13 +70,13 @@ model ResponsibleStudents {
 }
 
 model CotaParteControle {
-  id          Int       @id @default(autoincrement())
-  studentId   Int       @unique
-  student     Student   @relation(fields: [studentId], references: [id])
+  id          Int     @id @default(autoincrement())
+  studentId   Int     @unique
+  student     Student @relation(fields: [studentId], references: [id])
   installment Int
   paid        Int
   price       Float
-  dependency  Int       @default(1)
+  dependency  Int     @default(1)
   year        Int?
 }
 
@@ -83,14 +85,14 @@ model CotaParteControle {
 // [START] Autorizados a buscar
 
 model AuthorizedCarriers {
-  id          Int         @id @unique() @default(autoincrement())
+  id          Int                            @id @unique() @default(autoincrement())
   name        String
   cpf         String
   parentesco  String
   createdById Int
-  createdBy   Responsible @relation(fields: [createdById], references: [id])
-  createdAt   DateTime    @default(now())
-  students AuthorizedCarriersOnStudents[]
+  createdBy   Responsible                    @relation(fields: [createdById], references: [id])
+  createdAt   DateTime                       @default(now())
+  students    AuthorizedCarriersOnStudents[]
 }
 
 model AuthorizedCarriersOnStudents {

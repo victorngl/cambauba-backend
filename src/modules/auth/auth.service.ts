@@ -15,29 +15,33 @@ export class AuthService {
     if (user?.password !== pass) {
       throw new UnauthorizedException();
     }
-    const payload = { email: user.email };
+    const payload = {
+      name: user.name,
+      email: user.email,
+      permissions: user.permissions
+    };
 
     return {
       access_token: await this.tokenGeneretor(payload, '7200s'),
     };
   }
 
-  async tokenGeneretor(payload: { email: string }, timeToExpire: string | null) {
+  async tokenGeneretor(payload, timeToExpire: string | null) {
 
     let secretConfigs;
     secretConfigs = { secret: jwtConstants.secret }
 
-    if(timeToExpire!== null) {
+    if (timeToExpire !== null) {
       secretConfigs = { ...secretConfigs, expiresIn: timeToExpire };
     }
-    
+
     const accessToken = await this.jwtService.signAsync(
-      { email: payload.email },
+      payload,
       secretConfigs,
     );
 
     const refreshToken = await this.jwtService.signAsync(
-      { email: payload.email },
+      payload,
       secretConfigs,
     );
     return { access_token: accessToken, refresh_token: refreshToken };
@@ -56,8 +60,8 @@ export class AuthService {
     }
 
     const decode = this.jwtService.decode(refreshToken);
-    
-    if(decode === null) {
+
+    if (decode === null) {
       throw new HttpException('Token inválido.', HttpStatus.NOT_FOUND);
     }
 
@@ -83,6 +87,6 @@ export class AuthService {
       }
       throw new UnauthorizedException(err.name);
     }
-    
+
   }
 }

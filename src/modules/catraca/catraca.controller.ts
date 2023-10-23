@@ -1,10 +1,10 @@
-import { Body, Controller, HttpCode, HttpException, HttpStatus, Post } from '@nestjs/common';
-import { CatracaService } from './catraca.service';
+import { Body, Controller, HttpCode, HttpException, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { CatracaMessageDto } from './dto/catraca-sendmessage.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { AgendaeduService } from '../agendaedu/agendaedu.service';
 import { AgendaEduNotificationService } from '../notifications/agendaedu-notification.service';
 import { IAgendaEduNotification } from '../notifications/interfaces/notifications.interface';
+import { Permissions } from '../auth/permissions/permissions.decorator';
 
 
 @ApiTags('Catraca')
@@ -14,6 +14,7 @@ export class CatracaController {
 
   @Post('move')
   @HttpCode(200)
+  @Permissions(['agendaedu-send-notification'])
   async sendCatracaMessage(@Body() catracaMessageDto: CatracaMessageDto) {
 
     //VERIFICAR SE O SCHEDULE ESTA NO PADRÃO EXIGIDO
@@ -50,8 +51,6 @@ export class CatracaController {
         from: 'Catraca EMC'
       }
     }
-
-    console.log(messageData)
 
     return await this.agendaeduNotification.send(messageData, agendaEduBearerToken);
   }

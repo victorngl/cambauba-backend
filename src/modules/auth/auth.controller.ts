@@ -7,8 +7,10 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiExcludeController } from '@nestjs/swagger';
+import { Public } from './decorators/public.decorator';
 
 @ApiExcludeController(true)
+@Public()
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) { }
