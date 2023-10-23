@@ -3,10 +3,8 @@ import { UsersService } from './users.service';
 import { Prisma } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthGuard } from '../auth/auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 
-@UseGuards(AuthGuard)
 @ApiTags('Usuários')
 @Controller('users')
 export class UsersController {
