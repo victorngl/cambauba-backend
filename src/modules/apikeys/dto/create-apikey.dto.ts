@@ -11,7 +11,6 @@ export class CreateApikeyDto {
     @IsNumber()
     ownerId  :number
     @ApiProperty()
-    @IsNotEmpty()
     expire?   :string;
     token?    :string;
 }

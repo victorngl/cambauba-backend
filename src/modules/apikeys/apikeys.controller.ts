@@ -26,7 +26,11 @@ export class ApikeysController {
         throw new HttpException("Usuário nao existe", HttpStatus.NOT_FOUND);
       }
       
-      const payload = { email: user.email }
+      const payload = {
+        name: user.name,
+        email: user.email,
+        permissions: user.permissions
+      };
 
       const token = await this.authService.tokenGeneretor(payload, createApikeyDto.expire);
 
