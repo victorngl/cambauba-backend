@@ -1,28 +1,26 @@
 import { Body, Controller, HttpCode, HttpException, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { CatracaMessageDto } from './dto/catraca-sendmessage.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { AgendaeduService } from '../agendaedu/agendaedu.service';
-import { AgendaEduNotificationService } from '../notifications/agendaedu-notification.service';
-import { IAgendaEduNotification } from '../notifications/interfaces/notifications.interface';
 import { Permissions } from '../auth/permissions/permissions.decorator';
+import { CatracaServiceSendNotification } from './catraca-sendnotification.service';
+import { CatracaServiceMove } from './catraca-move.service';
 
 
 @ApiTags('Catraca')
 @Controller('catraca')
 export class CatracaController {
-  constructor(private readonly agendaeduService: AgendaeduService, private readonly agendaeduNotification: AgendaEduNotificationService) { }
+  constructor(private readonly catracaServiceNotification: CatracaServiceSendNotification, private readonly catracaMoveGateSave: CatracaServiceMove) { }
 
   @Post('move')
   @HttpCode(200)
   @Permissions(['agendaedu-send-notification'])
-  async sendCatracaMessage(@Body() catracaMessageDto: CatracaMessageDto) {
+  async catracaMoveHandler(@Body() catracaMessageDto: CatracaMessageDto) {
 
     //VERIFICAR SE O SCHEDULE ESTA NO PADRÃO EXIGIDO
     const regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
 
     if (!regex.test(catracaMessageDto.schedule)) {
       throw new HttpException("Formato do horário inválido.", HttpStatus.NOT_FOUND);
-
     }
 
     //VERIFICA SE O TIPO É IN OU OUT
@@ -30,28 +28,11 @@ export class CatracaController {
       throw new HttpException("Tipo de movimento inválido, ele pode ser do tipo IN ou OUT", HttpStatus.NOT_FOUND);
     }
 
-    //OBTENCAO DO TOKEN BEARER DA AGENDA EDU
-    const agendaEduBearerToken = await this.agendaeduService.getAgendaEduBearerToken();
+    this.catracaMoveGateSave.save(catracaMessageDto);
 
-    const typeMoveTitle = (catracaMessageDto.type == 'IN') ? 'Entrada de Aluno' : 'Saída de Aluno';
-    const typeMoveDescription = (catracaMessageDto.type == 'IN') ? ' entrou na Escola às ' : ' saiu da Escola às ';
-    const [dateMove, timeMove] = catracaMessageDto.schedule.split(' ')
+    const notification = await this.catracaServiceNotification.sendCatracaMessage(catracaMessageDto);
 
-    const descriptionMessage = "O aluno " + catracaMessageDto.studentName + typeMoveDescription + timeMove + ' em ' + dateMove + '.';
-
-    const messageData: IAgendaEduNotification = {
-      "notification": {
-        student_external_id: catracaMessageDto.studentId,
-        student_can_see: true,
-        send_to_all_responsibles: true,
-        category: "gate",
-        send_at: catracaMessageDto.schedule,
-        title: typeMoveTitle,
-        description: descriptionMessage,
-        from: 'Catraca EMC'
-      }
-    }
-
-    return await this.agendaeduNotification.send(messageData, agendaEduBearerToken);
+    return notification;
   }
+
 }

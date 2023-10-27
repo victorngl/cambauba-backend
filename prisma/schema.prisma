@@ -106,3 +106,15 @@ model AuthorizedCarriersOnStudents {
 }
 
 // [END] Autorizados a buscar
+
+// [START] Catraca
+
+model GateMove {
+  id          Int                            @id @unique() @default(autoincrement())
+  studentId   String
+  studentName String
+  schedule    String
+  type        String
+}
+
+// [END] Catraca

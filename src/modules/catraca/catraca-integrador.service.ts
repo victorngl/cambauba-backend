@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class CatracaService {
+export class CatracaServiceIntegrador {
   constructor() { }
   
-  saveMoveOnDb(): boolean {
+  healthCheck(): boolean {
     return false;
   }
 
