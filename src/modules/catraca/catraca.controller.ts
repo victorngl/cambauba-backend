@@ -33,6 +33,7 @@ export class CatracaController {
     const notification = await this.catracaServiceNotification.sendCatracaMessage(catracaMessageDto);
 
     return notification;
+    
   }
 
 }
