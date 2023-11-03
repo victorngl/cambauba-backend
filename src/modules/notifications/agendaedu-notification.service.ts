@@ -13,7 +13,7 @@ export class AgendaEduNotificationService implements NotificationsService
 
         const headers = {
             'Accept': 'application/json',
-            'Content-Type': 'applica,,tion/json',
+            'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + agendaEduBearerToken,
             'x-school-token': process.env.AGENDAEDU_SCHOOL_ID,
         };

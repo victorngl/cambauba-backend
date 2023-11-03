@@ -15,7 +15,7 @@ export class CatracaController {
   @HttpCode(200)
   @Permissions(['agendaedu-send-notification'])
   async catracaMoveHandler(@Body() catracaMessageDto: CatracaMessageDto) {
-
+    
     //VERIFICAR SE O SCHEDULE ESTA NO PADRÃO EXIGIDO
     const regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
 
