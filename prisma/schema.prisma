@@ -12,14 +12,13 @@ datasource db {
 
 // [START] Users of Backend and their Api Keys
 model User {
-  id             Int         @id @unique @default(autoincrement())
-  email          String
-  name           String?
-  password       String
-  permissions    Json?
-  apiKeys        ApiKeys[]
+  id          Int       @id @unique @default(autoincrement())
+  email       String
+  name        String?
+  password    String
+  permissions Json?
+  apiKeys     ApiKeys[]
 }
-
 
 model ApiKeys {
   id      Int     @id @default(autoincrement())
@@ -110,7 +109,7 @@ model AuthorizedCarriersOnStudents {
 // [START] Catraca
 
 model GateMove {
-  id          Int                            @id @unique() @default(autoincrement())
+  id          Int    @id @unique() @default(autoincrement())
   studentId   String
   studentName String
   schedule    String
@@ -118,3 +117,23 @@ model GateMove {
 }
 
 // [END] Catraca
+
+// [START] Matricula
+
+model Matricula {
+  id Int @id @unique
+  name String
+  age String?
+  datebirth String?
+  unity String
+  dependency String?
+  course String
+  class String
+  financy String
+  quota Int
+  alimentation String?
+  nextcourse String?
+  regime String?
+}
+
+// [END] Matricula

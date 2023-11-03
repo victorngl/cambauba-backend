@@ -9,9 +9,10 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AgendaeduModule } from './modules/agendaedu/agendaedu.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { HttpModule } from '@nestjs/axios';
+import { MatriculaModule } from './modules/matricula/matricula.module';
 
 @Module({
-  imports: [CatracaModule, UsersModule, ApikeysModule, AuthModule, AgendaeduModule, NotificationsModule, HttpModule],
+  imports: [CatracaModule, UsersModule, ApikeysModule, AuthModule, AgendaeduModule, NotificationsModule, HttpModule, MatriculaModule],
   controllers: [AppController],
   providers: [AppService],
 })
