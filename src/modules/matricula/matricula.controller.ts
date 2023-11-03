@@ -28,7 +28,7 @@ export class MatriculaController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMatriculaDto: Prisma.MatriculaUpdateInput) {
-    return this.matriculaService.update({ where: { id: + id }, data: updateMatriculaDto});
+    return this.matriculaService.update({ where: { id: +id }, data: updateMatriculaDto});
   }
 
   @Delete(':id')

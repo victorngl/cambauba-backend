@@ -20,7 +20,7 @@ async function bootstrap() {
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
 
   app.useGlobalPipes(new ValidationPipe());  //Valida os Types
-
+  app.enableCors();
   await app.listen(3010);
 }
 
