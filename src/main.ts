@@ -20,7 +20,17 @@ async function bootstrap() {
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
 
   app.useGlobalPipes(new ValidationPipe());  //Valida os Types
-  app.enableCors();
+
+
+  app.enableCors({
+    "origin": "*",
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "preflightContinue": false,
+    "optionsSuccessStatus": 204,
+    "allowedHeaders": ['content-type', 'accept']
+  });
+
+
   await app.listen(3010);
 }
 
