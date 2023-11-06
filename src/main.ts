@@ -21,15 +21,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());  //Valida os Types
 
-
-  app.enableCors({
-    "origin": "*",
-    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-    "preflightContinue": false,
-    "optionsSuccessStatus": 204,
-    "allowedHeaders": ['content-type', 'accept']
-  });
-
+  app.enableCors();
 
   await app.listen(3010);
 }
