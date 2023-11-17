@@ -134,6 +134,7 @@ model Matricula {
   alimentation String?
   nextcourse String?
   regime String?
+  renew Boolean?
 }
 
 // [END] Matricula
