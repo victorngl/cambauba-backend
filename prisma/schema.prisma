@@ -110,7 +110,7 @@ model AuthorizedCarriersOnStudents {
 
 model GateMove {
   id          Int    @id @unique() @default(autoincrement())
-  studentId   String
+  studentId   Int
   studentName String
   schedule    String
   type        String

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CatracaMessageDto {
   @ApiProperty({
@@ -7,8 +7,8 @@ export class CatracaMessageDto {
     description: `Id que está cadastrado no sistema de catracas.`,
   })
   @IsNotEmpty()
-  @IsString()
-  studentId: string;
+  @IsNumber()
+  studentId: number;
   @ApiProperty({
     example: 'Gustavo Carmo',
     description: `Nome do Aluno`,

@@ -21,9 +21,10 @@ export class CatracaServiceSendNotification {
 
     const messageData: IAgendaEduNotification = {
       "notification": {
-        student_external_id: catracaMessageDto.studentId,
+        student_profile_id: Number(catracaMessageDto.studentId),
         student_can_see: true,
         send_to_all_responsibles: true,
+        responsible_profile_ids: [],
         category: "gate",
         send_at: catracaMessageDto.schedule,
         title: typeMoveTitle,

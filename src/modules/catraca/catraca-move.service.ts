@@ -10,7 +10,7 @@ export class CatracaServiceMove {
   async save(catracaMessageDto: CatracaMessageDto): Promise<boolean> {
 
     const data = {
-      studentId: catracaMessageDto.studentId,
+      studentId: Number(catracaMessageDto.studentId),
       studentName: catracaMessageDto.studentName,
       schedule: catracaMessageDto.schedule,
       type: catracaMessageDto.type
