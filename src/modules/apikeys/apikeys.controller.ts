@@ -5,9 +5,11 @@ import { ApiKeys, Prisma } from '@prisma/client';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { UsersService } from '../users/users.service';
 import { AuthService } from '../auth/auth.service';
+import { Permissions } from '../auth/permissions/permissions.decorator';
 
 @ApiExcludeController(true)
 @Controller('apikeys')
+@Permissions(['apikeys'])
 export class ApikeysController {
   constructor(private readonly apikeysService: ApikeysService,
     private readonly usersService: UsersService,
