@@ -17,8 +17,7 @@ export class CatracaServiceMove {
     }
 
     try {
-
-
+      
       const gateMove = await this.createGateMove(data)
 
       if (gateMove) {
